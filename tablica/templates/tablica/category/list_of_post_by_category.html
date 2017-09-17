@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block description %}{{ category.name }}{% endblock %}
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block styles %}
+    <style>
+    body {
+        background: url("{% static "static_dirs/img/TLO.png" %}") no-repeat center center fixed;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+     </style>
+{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container">
+    <div class="col-md-10">
+    <br>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h1>Wszystkie wpisy z kategorii: <strong>{{ category_slug }}</strong></h1>
+            </div>
+            <div class="panel-footer">
+                <a href="{% url 'tablica:new_post' %}" class="btn btn-primary" role="button">
+                <span class="fa fa-pencil-square-o fa-1x" aria-hidden="true"></span>&nbsp;Dodaj wpis</a>
+            </div>
+        </div>
+        <br>
+
+        {% for posts in post %}
+
+        <div class="panel panel-info">
+            <div class="panel-body">
+                <h2><a href="{{ posts.get_absolute_url }}"><i class="fa fa-comment-o fa-1x" aria-hidden="true"></i> {{ posts.temat }}</a> </h2>
+            </div>
+            <div class="panel-body">
+                {{ posts.tekst|truncatewords:40|linebreaks }}
+            </div>
+            <div class="panel-footer">
+                <small>Napisany przez: <strong>{{ posts.author }}</strong>, dnia: {{ posts.published }}</small>
+            </div>
+        </div>
+
+        {% endfor %}
+        {% include "tablica/paginator.html" with page=post %}
+
+    </div>
+    <div class="col-md-2">
+    <br>
+        <div class="thumbnail">
+        <br>
+            <p class="text-center"><a href="{% url 'tablica:list_of_post' %}" class="btn btn-default" role="button">
+                <span class="fa fa-reply fa-1x" aria-hidden="true"></span>&nbsp;Tablica</a></p>
+            <h3><p class="text-center">Kategorie:</p></h3>
+            {% for cat in categories %}
+            <ul>
+            <li><h4><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></h4></li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

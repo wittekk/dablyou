@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block description %}Dablyou{% endblock %}
+{% block title %}Dablyou{% endblock %}
+{% block styles %}
+<link href='https://fonts.googleapis.com/css?family=Frijole' rel='stylesheet'>
+    <style>
+         body {
+             background: url("{% static "static_dirs/img/clouds.jpg" %}") no-repeat center center fixed;
+             -moz-background-size: cover;
+             -o-background-size: cover;
+             background-size: cover;
+
+         }
+        .jumbotron {
+            color: white;
+            padding-bottom: 0px;
+        }
+        .jumbotron h1 {
+            color: white;
+            font-family: "Frijole";
+            font-size: 100px;
+
+        }
+        div.c-wrapper{
+        height: 600px; /* for example */
+        margin: auto;
+        }
+
+        .carousel-inner > .item > img,
+        .carousel-inner > .item > a > img{
+        height: 600px; /* use this, or not */
+        margin: auto;
+        }
+
+     </style>
+{% endblock %}
+
+
+{% block body %}
+
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron" style="background-color: rgba(0,0,0,0.5)">
+      <div class="container">
+          <div class="col-sm-6">
+              <h1>Hi!</h1>
+              <p>Jeśli wpadłeś tu przypadkiem to i tak nic straconego. Trafiłeś na mój prywatny serwis, na którym umieszczam swoje przykładowe projekty. Jeśli jesteś ciekawy wsadź głowę w chmury
+                  <i class="fa fa-cloud fa-1x" aria-hidden="true"></i>
+                  <i class="fa fa-cloud fa-1x" aria-hidden="true"></i>
+                  <i class="fa fa-cloud fa-1x" aria-hidden="true"></i>
+              </p>
+              <p><a class="btn btn-default btn-lg" style="background-color: rgba(255,255,255,0.3)" href="#opis" role="button">Więcej &rdca;</a></p>
+          </div>
+          <div class="col-sm-6">
+              <img src="{% static 'static_dirs/img/Anonymous.png' %}" class="img-responsive" />
+          </div>
+
+      </div>
+    </div>
+
+<div class="container" style="text-align: center">
+<div class="col-sm-6 col-sm-offset-3" style="margin-top: 100px">
+        <h4 style="color: white ">Zostaw maila i wsadź głowę w chmury
+            <i class="fa fa-cloud fa-1x" aria-hidden="true"></i>
+            <i class="fa fa-cloud fa-1x" aria-hidden="true"></i>
+            <i class="fa fa-cloud fa-1x" aria-hidden="true"></i>
+        </h4>
+<br/>
+    <form class="form-horizontal" method="post" action=""> {% csrf_token %}
+        <div class="form-group form-group-lg">
+
+        {% if form.email.errors %}
+            {% for error in form.email.errors %}
+        <div class="alert alert-danger" role="alert">{{ error }} - Musisz wpisać, takie życie...</div>
+        {% endfor %}
+        {% endif %}
+
+            <div class="input-group">
+        <input class="form-control" type="email" name="email" placeholder="Twój email..." />
+                <span class="input-group-btn">
+        <input type="submit" value="OK!" class="btn btn-primary btn-lg" />
+                </span>
+            </div>
+        </div>
+    </form>
+
+</div>
+</div>
+
+<div class="row" style="text-align: center; background-color: rgba(255,255,255,0.1); margin-top: 300px">
+    <div class="" id="opis">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+    <li data-target="#myCarousel" data-slide-to="3"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="{% static 'static_dirs/img/1.jpg' %}" alt="S">
+    </div>
+
+    <div class="item">
+      <img src="{% static 'static_dirs/img/2.jpg' %}" alt="S">
+    </div>
+
+    <div class="item">
+      <img src="{% static 'static_dirs/img/3.jpg' %}" alt="S">
+    </div>
+
+    <div class="item">
+      <img src="{% static 'static_dirs/img/kot.jpg' %}" alt="S">
+    </div>
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="fa fa-angle-double-left fa-4x" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="fa fa-angle-double-right fa-4x" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,11 @@
+body{
+    background: grey url("images/TLO.png");
+}
+
+.navbar{
+    border-radius: 0;
+}
+
+.navbar-brand{
+    font-family: 'Satisfy', cursive;
+}

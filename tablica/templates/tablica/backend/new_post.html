@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block description %}Dodaj wpis{% endblock %}
+{% block title %}Dodaj wpis{% endblock %}
+
+{% block styles %}
+    <style>
+         body {
+             background: url("{% static "static_dirs/img/TLO.png" %}") no-repeat center center fixed;
+             -moz-background-size: cover;
+             -o-background-size: cover;
+             background-size: cover;
+         }
+     </style>
+{% endblock %}
+
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="page-header">
+            <h1><i class="fa fa-commenting-o fa-2x" aria-hidden="true"></i><strong> Dodaj wpis</strong></h1>
+        </div>
+        <form method="POST">{% csrf_token %}{{ form|crispy }}<!-- form.as_p ; form|crispy -->
+        <button type="submit" class="btn btn-primary">Zatwierdź</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
+

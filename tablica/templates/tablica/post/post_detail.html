@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block description %}{{ post.temat }}{% endblock %}
+{% block title %}{{ post.temat }}{% endblock %}
+{% block styles %}
+    <style>
+    body {
+        background: url("{% static "static_dirs/img/TLO.png" %}") no-repeat center center fixed;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+     </style>
+{% endblock %}
+
+
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container">
+    <div class="col-md-10 col-md-offset-1">
+    <br>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h1><strong><i class="fa fa-comment-o fa-2x" aria-hidden="true"></i> {{ post.temat }}</strong></h1>
+            </div>
+            <div class="panel-body">
+                {{ post.tekst|linebreaks }}
+            </div>
+            <div class="panel-footer">
+                <small>Opublikowany przez <strong>{{ post.author }}</strong> data:{{ post.published }} w kategorii <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a></small>
+            </div>
+        </div>
+        <br>
+        <p class="text-center"><a href="{% url 'tablica:add_comment' slug=post.slug %}" class="btn btn-primary active" role="button">Zostaw Komentarz</a></p>
+        <div class="row">
+            <div class="col-xs-6"><a href="{% url 'tablica:list_of_post' %}" class="btn btn-default" role="button">
+                <span class="fa fa-reply fa-1x" aria-hidden="true"></span>&nbsp;Tablica </a>
+                <small>  Całkowita liczba komentarzy: {{ post.comments.count }}</small></div>
+            <div class="col-xs-6"></div>
+        </div>
+        <br>
+
+        {% for comment in post.comments.all %}
+         <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-commenting-o fa-1x" aria-hidden="true"></i> <strong>{{ comment.user }}</strong><small> skomentował post dnia: {{ comment.created }}</small>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-2">
+                    {{ comment.komentarz|truncatewords:20|linebreaks}}
+                </div>
+            </div>
+         </div>
+        {% empty %}
+            <p>Nie ma jeszcze kometarzy</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

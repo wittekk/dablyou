@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block description %}ALBUM-foto{% endblock %}
+{% block title %}ALBUM-foto{% endblock %}
+{% block styles %}
+    <style>
+         body {
+             background: url("{% static "static_dirs/img/TLO.png" %}") no-repeat center center fixed;
+             -moz-background-size: cover;
+             -o-background-size: cover;
+             background-size: cover;
+         }
+/*         .btn-warning {
+            position:absolute;
+            left:25%;
+
+         }*/
+     </style>
+{% endblock %}
+
+
+{% block body %}
+{% include "navbar.html" %}
+
+
+<div class="col-md-2">
+    <div class="thumbnail">
+        <img src="{{ album.album_logo }}" style="width: 250px;">
+        <h2><a href="" class="btn btn-default" role="button">
+                <i class="fa fa-star-o  fa-1x" aria-hidden="true"></i></a>
+          {{ album.nazwa_albumu }}</h2>
+        <h5>Temat:{{ album.temat }}</h5>
+        <h5>Autor: {{ album.user }}</h5>
+
+        {% if user.is_authenticated and album.user == user %}
+
+        <a href="{% url 'albumbum:foto-add' album.pk %}" class="btn-sm btn-success active" role="button">
+        <span class="fa fa-plus fa-1x" aria-hidden="true"></span>&nbsp;Dodaj element do albumu</a>
+        <br/>
+        <br/>
+        <a href="{% url 'albumbum:albumbum-update' album.pk %}" class="btn-sm btn-primary active" role="button">
+        <span class="fa fa-pencil-square-o  fa-1x" aria-hidden="true"></span>&nbsp;Edytuj album</a>
+        <br/>
+        <br/>
+
+        <!-- Okno Modal przy usuwaniu -->
+        <button type="button" class="btn-xs btn-warning btn-2g" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash-o  fa-1x" aria-hidden="true"></i>&nbsp;Usuń Album</button>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">UWAGA!</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Czy na pewno chcesz usunąć Album: <strong>{{ album.nazwa_albumu }}</strong> ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{% url 'albumbum:albumbum-delete' album.pk %}" method="post" style="display: inline">
+                            {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Usuń</button>
+                        </form>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Nie!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="thumbnail">
+          <small><span class="fa fa-info-circle fa-1x" aria-hidden="true"></span> Dodawać, edytować i usówać Album może tylko jego zalogowany Autor.</small>
+          <br/>
+          <a href="{% url 'albumbum:login_user' %}" class="btn-sm btn-default active" role="button">
+              <span class="fa fa-user-circle fa-1x" aria-hidden="true"></span>&nbsp;Zaloguj</a>
+        </div>
+        {% endif %}
+
+    </div>
+    <div class="thumbnail">
+      <h3>Opis:</h3>
+      <h5>{{ album.opis_albumu }}</h5>
+    </div>
+</div>
+<br>
+<div class="col-md-10">
+    
+    {% for foto in album.foto_set.all %}
+
+<div class="col-md-6">
+    <div class="thumbnail">
+        <div class="row">
+            <div class="col-xs-6" align="left">{{ foto.nazwa_foto }}</div>
+
+            {% if user.is_authenticated and album.user == user %}
+
+            <div class="col-xs-6" align="right"><a href="{% url 'albumbum:foto-update' foto.pk %}" class="btn-sm btn-primary active" role="button">
+            <span class="fa fa-pencil-square-o  fa-1x" aria-hidden="true"></span></a></div>
+
+            {% else %}
+            {% endif %}
+
+        </div>
+        <img alt="No .img  :-(" class="img-rounded" data-src="holder.js/100%x200" style="height: 500px; object-fit: contain; display: block" src="{{ foto.obraz }}" data-holder-rendered="true">
+        <div class="row">
+            <div class="col-xs-12 col-md-12" align="right">
+
+                {% if user.is_authenticated and album.user == user %}
+
+                <!-- Okno Modal przy usuwaniu -->
+                <button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal2"><i class="fa fa-trash-o  fa-1x" aria-hidden="true"></i></button>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal2" role="dialog" align="left">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title">UWAGA!</h4>
+                            </div>
+                            <div class="modal-body">
+                              <p>Czy na pewno chcesz usunąć obraz?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form action="{% url 'albumbum:foto-delete' foto.pk %}" method="post" style="display: inline">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit">Usuń</button>
+                                </form>
+                                <button type="button" class="btn btn-success" data-dismiss="modal">Nie!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% empty %}
+        <br>
+        <li>Jeszcze nie dodano żadnych obrazów</li>
+    {% endfor %}
+
+</div>
+<br>
+{% endblock %}
+

@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block description %}Twoje Wpisy{% endblock %}
+{% block title %}Twoje Wpisy{% endblock %}
+
+{% block styles %}
+    <style>
+    body {
+        background: url("{% static "static_dirs/img/TLO.png" %}") no-repeat center center fixed;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    div.alert {  /* to messages */
+        position: absolute;
+        top: 55px;
+        width: 100%;
+        text-align: center;
+        height: 50px;
+        border: 2px solid #73AD21;
+    }
+     </style>
+{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+<br><br><br>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tr>
+            <th>Temat</th>
+            <th>Kategoria</th>
+            <th>Autor</th>
+            <th>Opublikowany dnia:</th>
+            <th>Status</th>
+            <th>Edytuj Post</th>
+            <th>Usuń Post</th>
+        </tr>
+        {% for post in posts %}
+            {% if post.status == 'roboczy' %}
+                <tr class="danger">
+                    <td>{{ post.temat }}</td>
+                    <td>{{ post.category }}</td>
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.published }}</td>
+                    <td>{{ post.status }}</td>
+
+                    {% if user.is_authenticated and post.author == user %}
+
+                    <td><a href="{% url 'tablica:edit_post' slug=post.slug %}"><button type="button" class="btn btn-default"><i class="fa fa-pencil-square-o  fa-1x" aria-hidden="true"></i> Edit</button></a></td>
+                    <td><!-- Okno Modal przy usuwaniu -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2"><i class="fa fa-trash-o  fa-1x" aria-hidden="true"></i> Delete</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal2" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">UWAGA!</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <p>Czy na pewno chcesz usunąć Wpis?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="{% url 'tablica:delete_post' slug=post.slug %}" method="post" style="display: inline">
+                                        {% csrf_token %}
+                                    <button class="btn btn-danger" type="submit">Usuń</button>
+                                    </form>
+                                    <button type="button" class="btn btn-success" data-dismiss="modal">Nie!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div></td>
+                    {% else %}
+                    <td><i class="fa fa-exclamation-triangle  fa-1x" aria-hidden="true"></i> Edytować Wpis może tylko jego autor</td>
+                    <td><i class="fa fa-exclamation-triangle  fa-1x" aria-hidden="true"></i> Usuwać Wpis może tylko jego autor</td>
+                    {% endif %}
+
+                </tr>
+            {% else %}
+                <tr class="info">
+                    <td>{{ post.temat }}</td>
+                    <td>{{ post.category }}</td>
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.published }}</td>
+                    <td>{{ post.status }}</td>
+
+                    {% if user.is_authenticated and post.author == user %}
+
+                    <td><a href="{% url 'tablica:edit_post' slug=post.slug %}"><button type="button" class="btn btn-default"><i class="fa fa-pencil-square-o  fa-1x" aria-hidden="true"></i> Edit</button></a></td>
+                    <td><!-- Okno Modal przy usuwaniu -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2"><i class="fa fa-trash-o  fa-1x" aria-hidden="true"></i> Delete</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal2" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">UWAGA!</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <p>Czy na pewno chcesz usunąć Wpis?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="{% url 'tablica:delete_post' slug=post.slug %}" method="post" style="display: inline">
+                                        {% csrf_token %}
+                                    <button class="btn btn-danger" type="submit">Usuń</button>
+                                    </form>
+                                    <button type="button" class="btn btn-success" data-dismiss="modal">Nie!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div></td>
+                    {% else %}
+                    <td><i class="fa fa-exclamation-triangle  fa-1x" aria-hidden="true"></i> Edytować Wpis może tylko jego autor</td>
+                    <td><i class="fa fa-exclamation-triangle  fa-1x" aria-hidden="true"></i> Usuwać Wpis może tylko jego autor</td>
+                    {% endif %}
+
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+<a href="{% url 'tablica:list_of_post' %}" class="btn btn-default" role="button"><span class="fa fa-reply fa-1x" aria-hidden="true"></span>&nbsp;Tablica</a>
+    {% include "tablica/paginator.html" with page=posts %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
