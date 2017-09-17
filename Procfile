@@ -1,0 +1,1 @@
+web: gunicorn websiteWIT.wsgi --log-file -
